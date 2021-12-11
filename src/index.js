@@ -102,6 +102,27 @@ webApp.post('/whatsapp', async (req, res) => {
     }
 });
 
+// Website widget route
+webApp.get('/website', async (req, res) => {
+
+    let text = req.query.text;
+    let sessionId = req.query.mysession;
+
+    console.log('A request came.');
+    console.log(`Query text --> ${text}`);
+    console.log(`Session id --> ${sessionId}`);
+
+    let intentData = await DIALOGFLOW_API.detectIntent('en', text, sessionId);
+
+    res.setHeader('Access-Control-Allow-Origin', '*');
+
+    if (intentData.status == 1) {
+        res.send(intentData.text);
+    } else {
+        res.send('Chatbot is having problem. Try again after sometime.');
+    }
+});
+
 // Start the server
 webApp.listen(PORT, () => {
     console.log(`Server is up and running at ${PORT}`);
